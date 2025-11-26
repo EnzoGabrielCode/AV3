@@ -3,7 +3,9 @@ import { prisma } from '../lib/prisma'
 interface CriarEtapaDTO {
   nome: string
   descricao?: string
-  ordem: number
+  ordem?: number
+  prazo?: string
+  status?: string
   aeronaveId: number
 }
 
@@ -11,6 +13,7 @@ interface AtualizarEtapaDTO {
   nome?: string
   descricao?: string
   ordem?: number
+  prazo?: string
   status?: string
 }
 
@@ -64,9 +67,10 @@ export class EtapaService {
       data: {
         nome: dados.nome,
         descricao: dados.descricao,
-        ordem: dados.ordem,
+        ordem: dados.ordem || 0,
+        prazo: dados.prazo,
         aeronaveId: dados.aeronaveId,
-        status: 'pendente'
+        status: dados.status || 'Pendente'
       },
       include: {
         aeronave: true
@@ -92,7 +96,21 @@ export class EtapaService {
     return await prisma.etapa.update({
       where: { id },
       data: {
-        status: 'em_andamento'
+        status: 'Em Andamento'
+      },
+      include: {
+        aeronave: true
+      }
+    })
+  }
+
+  async finalizar(id: number) {
+    await this.buscarPorId(id)
+
+    return await prisma.etapa.update({
+      where: { id },
+      data: {
+        status: 'Concluida'
       },
       include: {
         aeronave: true
@@ -101,25 +119,19 @@ export class EtapaService {
   }
 
   async concluir(id: number) {
-    await this.buscarPorId(id)
-
-    return await prisma.etapa.update({
-      where: { id },
-      data: {
-        status: 'concluida'
-      },
-      include: {
-        aeronave: true
-      }
-    })
+    return this.finalizar(id)
   }
 
-  async deletar(id: number) {
+  async excluir(id: number) {
     await this.buscarPorId(id)
 
     return await prisma.etapa.delete({
       where: { id }
     })
+  }
+
+  async deletar(id: number) {
+    return this.excluir(id)
   }
 
   async reordenar(aeronaveId: number, etapasOrdem: { id: number; ordem: number }[]) {
