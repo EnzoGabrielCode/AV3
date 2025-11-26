@@ -1,101 +1,107 @@
 import Navbar from "../components/navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalCadastrarFuncionario from "../components/modals/modalCadastrarFuncionario";
+import { api } from "../services/api";
 
 function FuncionariosAdm() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [funcionarios, setFuncionarios] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleAddFuncionario = (novaFuncionario) => {
-    setFuncionarios([...funcionarios, novaFuncionario]);
+  useEffect(() => {
+    carregarFuncionarios();
+  }, []);
+
+  const carregarFuncionarios = async () => {
+    try {
+      setLoading(true);
+      const data = await api.get("/funcionarios");
+      setFuncionarios(data);
+    } catch (error) {
+      console.error("Erro ao carregar funcionarios:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  let [funcionarios, setFuncionarios] = useState([
-    {
-      id: 1,
-      nome: "Carlos Silva",
-      telefone: "(11) 91234-5678",
-      endereco: "Rua A, 123, São Paulo",
-      user: "carlos.silva",
-      senha: "senha123",
-      funcao: "Engenheiro",
-    },
-    {
-      id: 2,
-      nome: "Ana Souza",
-      telefone: "(21) 99876-5432",
-      endereco: "Avenida B, 456, Rio de Janeiro",
-      user: "ana.souza",
-      senha: "senha456",
-      funcao: "Administrador",
-    },
-  ]);
+  const handleAddFuncionario = async (novoFuncionario) => {
+    try {
+      const funcionario = await api.post("/funcionarios", novoFuncionario);
+      setFuncionarios([...funcionarios, funcionario]);
+      setShowModal(false);
+    } catch (error) {
+      console.error("Erro ao cadastrar funcionario:", error);
+      alert("Erro ao cadastrar funcionario");
+    }
+  };
 
   return (
     <div className="h-full w-full">
       <Navbar />
       <div className="h-full w-ful py-29 px-18">
         <div className="flex flex-col gap-6 h-full w-full">
-          <div className="flex justify-between">
-            <div className="flex flex-row gap-6">
-              <button
-                onClick={() => {
-                  navigate(-1);
-                }}
-                className="bg-slate-400 p-2 w-12 rounded-lg cursor-pointer shadow-md hover:bg-slate-300 transition"
-              >
-                <img src="/img/iconBack.png" alt="" />
-              </button>
-              <div className="bg-slate-400 size-fit text-2xl shadow-md font-medium p-2 rounded-lg">
-                FUNCIONARIOS - AERONAVE
-              </div>
-              <button
-                onClick={() => setShowModal(true)}
-                className="bg-blue-600 text-white size-fit text-2xl font-medium p-2 cursor-pointer shadow-md hover:bg-blue-500 transition rounded-xl"
-              >
-                ADICIONAR
-              </button>
+          <div className="flex flex-row gap-6">
+            <button
+              onClick={() => {
+                navigate("/homeAdm");
+              }}
+              className="bg-slate-400 size-fit text-2xl font-medium p-2 shadow-md rounded-lg hover:bg-slate-300 transition cursor-pointer"
+            >
+              AERONAVES
+            </button>
+            <button className="bg-slate-400 size-fit text-2xl font-medium p-2 shadow-md rounded-lg">
+              FUNCIONÁRIOS
+            </button>
+          </div>
+          <div className="flex flex-row flex-wrap gap-6">
+            {loading ? (
+              <p>Carregando...</p>
+            ) : (
+              funcionarios.map((funcionario) => (
+                <div
+                  key={funcionario.id}
+                  className="bg-slate-300 size-fit p-4 flex flex-col gap-2 shadow-md rounded-lg hover:bg-slate-200 cursor-pointer transition"
+                >
+                  <span className="font-bold text-xl">{funcionario.nome}</span>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td className="border border-black px-2">FUNÇÃO:</td>
+                        <td className="border border-black px-2">
+                          {funcionario.funcao || funcionario.role}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-black px-2">EMAIL:</td>
+                        <td className="border border-black px-2">
+                          {funcionario.email}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              ))
+            )}
+            <div
+              onClick={() => {
+                setShowModal(true);
+              }}
+              className="bg-slate-300 w-50 h-50 flex justify-center items-center shadow-md rounded-lg hover:bg-slate-200 cursor-pointer transition"
+            >
+              <span className="text-6xl font-bold border-3 rounded-full border-black w-15 h-15 flex items-center justify-center">
+                +
+              </span>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-7 gap-x-20 pb-7">
-            {funcionarios.map((funcionario) => (
-              <button className="bg-gray-300 flex p-8 cursor-pointer flex-col text-[1.25rem] font-medium rounded-lg shadow-md hover:bg-gray-200 transition">
-                <h3 className="text-[1.5rem] pb-6 font-extrabold text-start">
-                  {funcionario.nome}
-                </h3>
-
-                <div className="w-full border border-gray-500 rounded-lg overflow-hidden">
-                  <div className="flex justify-between border-b border-gray-500 p-2 bg-gray-100">
-                    <span>TELEFONE:</span>
-                    <span>{funcionario.telefone}</span>
-                  </div>
-
-                  <div className="flex justify-between border-b border-gray-500 p-2">
-                    <span>ENDEREÇO:</span>
-                    <span>{funcionario.endereco}</span>
-                  </div>
-
-                  <div className="flex justify-between border-b border-gray-500 p-2 bg-gray-100">
-                    <span>USER:</span>
-                    <span>{funcionario.user}</span>
-                  </div>
-
-                  <div className="flex justify-between p-2">
-                    <span>FUNÇÃO:</span>
-                    <span>{funcionario.funcao}</span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-          <ModalCadastrarFuncionario
-            open={showModal}
-            onClose={() => setShowModal(false)}
-            onSave={handleAddFuncionario}
-          />
         </div>
       </div>
+      <ModalCadastrarFuncionario
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleAddFuncionario}
+      />
     </div>
   );
 }
