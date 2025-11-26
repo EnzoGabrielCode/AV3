@@ -37,6 +37,27 @@ export class AeronaveController {
     }
   }
 
+  static async buscarFuncionarios(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id)
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ erro: 'ID inválido' })
+      }
+
+      const funcionarios = await aeronaveService.buscarFuncionarios(id)
+      return res.json(funcionarios)
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Aeronave não encontrada') {
+        return res.status(404).json({ erro: error.message })
+      }
+      return res.status(500).json({ 
+        erro: 'Erro ao buscar funcionarios da aeronave',
+        mensagem: error instanceof Error ? error.message : 'Erro desconhecido'
+      })
+    }
+  }
+
   static async criar(req: Request, res: Response) {
     try {
       const { cod, modelo, tipo, capacidade, alcance, status } = req.body
