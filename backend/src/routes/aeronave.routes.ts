@@ -4,6 +4,7 @@ import { AeronaveController } from '../controllers/aeronave.controller'
 const router = Router()
 
 router.get('/', AeronaveController.listar)
+router.get('/:id/funcionarios', AeronaveController.buscarFuncionarios)
 router.get('/:id', AeronaveController.buscarPorId)
 router.post('/', AeronaveController.criar)
 router.put('/:id', AeronaveController.atualizar)
