@@ -1,14 +1,12 @@
-import { Router } from 'express';
-import * as FuncionarioController from '../controllers/funcionario.controller';
+import { Router } from 'express'
+import { FuncionarioController } from '../controllers/funcionario.controller'
 
-const router = Router();
+const router = Router()
 
-router.get('/', FuncionarioController.listarFuncionarios);
-router.get('/aeronave/:aeronaveId', FuncionarioController.listarPorAeronave);
-router.get('/:id', FuncionarioController.buscarPorId);
-router.post('/', FuncionarioController.criarFuncionario);
-router.put('/:id', FuncionarioController.atualizarFuncionario);
-router.put('/:id/aeronave', FuncionarioController.associarAeronave);
-router.delete('/:id', FuncionarioController.deletarFuncionario);
+router.get('/', FuncionarioController.listar)
+router.get('/:id', FuncionarioController.buscarPorId)
+router.post('/', FuncionarioController.criar)
+router.put('/:id', FuncionarioController.atualizar)
+router.delete('/:id', FuncionarioController.excluir)
 
-export default router;
+export default router
