@@ -1,15 +1,12 @@
-import { Router } from 'express';
-import * as TesteController from '../controllers/teste.controller';
+import { Router } from 'express'
+import { TesteController } from '../controllers/teste.controller'
 
-const router = Router();
+const router = Router()
 
-router.get('/', TesteController.listarTestes);
-router.get('/aeronave/:aeronaveId', TesteController.listarPorAeronave);
-router.get('/:id', TesteController.buscarPorId);
-router.post('/', TesteController.criarTeste);
-router.put('/:id', TesteController.atualizarTeste);
-router.put('/:id/executar', TesteController.executarTeste);
-router.put('/:id/resultado', TesteController.registrarResultado);
-router.delete('/:id', TesteController.deletarTeste);
+router.get('/', TesteController.listar)
+router.get('/:id', TesteController.buscarPorId)
+router.post('/', TesteController.criar)
+router.put('/:id', TesteController.atualizar)
+router.delete('/:id', TesteController.excluir)
 
-export default router;
+export default router
