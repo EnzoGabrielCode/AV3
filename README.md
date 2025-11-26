@@ -1,71 +1,163 @@
-# Projeto AeroCode
+# Projeto AeroCode - Sistema de Gestao de Producao de Aeronaves
 
-## 🎯 Sobre o Projeto
+Sistema completo para gestao de producao de aeronaves com frontend React e backend Node.js/TypeScript.
 
-O AeroCode é um sistema de gerenciamento projetado para facilitar o controle e a padronização dos processos de criação de aeronaves. A plataforma permite que empresas registrem e acompanhem todo o ciclo de implementação de uma aeronave, desde o cadastro de peças até os testes e a aprovação final .
+## Tecnologias Utilizadas
 
-## 📄 Documentação
+### Frontend
+- React 18 + Vite
+- React Router DOM
+- Axios
+- CSS Modules
 
-Consulte o relatório técnico detalhado do projeto:
+### Backend
+- Node.js + TypeScript
+- Express.js
+- Prisma ORM
+- MySQL
+- bcryptjs (autenticacao)
+- JSON Web Token (JWT)
 
-- [Relatório AeroCode (PDF)](./relatorio/relatorio_aerocode.pdf)
+## Estrutura do Projeto
 
-## ⚙️ Como Rodar o Projeto
+```
+AV3/
+├── backend/                 # API REST
+│   ├── prisma/
+│   │   └── schema.prisma   # Modelo de dados
+│   └── src/
+│       ├── controllers/    # Controladores HTTP
+│       ├── services/       # Logica de negocio
+│       ├── routes/         # Rotas da API
+│       ├── middlewares/    # Middlewares (auth, timing)
+│       └── lib/            # Cliente Prisma
+├── src/                    # Frontend React
+├── public/
+└── relatorio/              # Documentacao PDF
+```
 
-Siga os passos abaixo para executar o projeto localmente:
+## Pre-requisitos
 
-1.  **Clone o repositório**
+- Node.js 18+
+- MySQL 8.0+
+- npm ou yarn
 
-    ```bash
-    git clone https://github.com/EnzoGabrielCode/AV2
-    cd AV2
-    ```
+## Como Rodar o Projeto
 
-2.  **Instale as dependências**
-    Execute o comando abaixo na raiz do projeto para instalar todos os pacotes necessários:
+### 1. Clone o repositorio
 
-    ```bash
-    npm install
-    ```
+```bash
+git clone https://github.com/EnzoGabrielCode/AV3
+cd AV3
+```
 
-3.  **Execute a aplicação**
-    Para iniciar o servidor de desenvolvimento (usando o Vite, como visto no seu `vite.config.js`), rode:
+### 2. Configure o Backend
 
-    ```bash
-    npm run dev
-    ```
+```bash
+cd backend
+npm install
+```
 
-4.  **Acesse no navegador**
-    Após o comando anterior, o terminal mostrará o endereço local. Geralmente, é o `http://localhost:5173`. Abra este link no seu navegador.
+### 3. Configure o banco de dados
 
-## 🚀 Como Usar o Sistema
+Crie um arquivo `.env` na pasta `backend/` com:
 
-O uso da plataforma é baseado no seu nível de acesso. O fluxo principal é o seguinte:
+```env
+DATABASE_URL="mysql://root:sua_senha@localhost:3306/aerocode"
+JWT_SECRET="sua_chave_secreta_jwt"
+PORT=3001
+```
 
-1.  **Acesso (Login)**: O primeiro passo é acessar a **Tela de Login**.
-2.  **Painel Principal**: Após o login, você será redirecionado para o \*_Painel Principal_/. Este painel é personalizado e mostrará os módulos e funcionalidades disponíveis especificamente para o seu tipo de perfil (Operário, Engenheiro ou Administrador).
-3.  **Navegação pelos Módulos**: A partir do painel, você pode navegar para as seções específicas para realizar seu trabalho, tais como:
-        - Cadastro de Aeronaves
-        - Controle de Peças ,
-        - Gerenciamento de Testes ,
-        - Gerenciamento de Usuários ,
-        - Geração de Relatórios ,
-4.  **Execução de Tarefas**: Dentro de cada módulo, você utilizará formulários para registrar, editar e atualizar dados, como registrar a execução de uma tarefa ou aprovar uma etapa técnic.
+### 4. Execute as migracoes do Prisma
 
-## 👥 Perfis de Usuário e Permissões
+```bash
+npx prisma migrate dev --name init
+npx prisma generate
+```
 
-O sistema possui três tipos de usuários, cada um com responsabilidades claras :
+### 5. Inicie o Backend
 
-- ### **Administrador (Admin)**
+```bash
+npm run dev
+```
 
-- **O que faz?** Gerencia todo o sistema, define papéis e monitora as atividade.
-    - **Como usar?** O Admin é o único que pode acessar o módulo de **Usuários** para cadastrar, editar ou remover Operários e Engenheiros.
+O backend estara disponivel em `http://localhost:3001`
 
-- ### **Engenheiro (Eng)**
+### 6. Configure o Frontend
 
-- **O que faz?** Supervisiona as etapas técnicas, valida informações e libera processos para a próxima fase.
-    - **Como usar?** O Engenheiro deve acessar os módulos de **Etapas** e **Testes** para revisar o trabalho feito pelo Operário, validar os dados e aprovar a conclusão de um processo.
+Em outro terminal, na raiz do projeto:
 
-- ### **Operário (Ope)**
-  - **O que faz?** É o responsável pela execução. Ele registra as tarefas que realizou e atualiza o status dos processos.
-      - **Como usar?** O Operário utiliza o sistema para acessar suas tarefas designadas (ex: "Montagem da Fuselagem", "Instalação de Peça X") e, ao concluí-las, atualiza o **status** do processo (ex: de "Pendente" para "Em Andamento" ou "Concluído").
+```bash
+npm install
+npm run dev
+```
+
+O frontend estara disponivel em `http://localhost:5173`
+
+## Endpoints da API
+
+### Autenticacao
+- `POST /api/auth/login` - Login de usuario
+- `POST /api/auth/register` - Registro de usuario
+
+### Aeronaves
+- `GET /api/aeronaves` - Listar todas
+- `GET /api/aeronaves/:id` - Buscar por ID
+- `POST /api/aeronaves` - Criar nova
+- `PUT /api/aeronaves/:id` - Atualizar
+- `DELETE /api/aeronaves/:id` - Deletar
+- `GET /api/aeronaves/stats` - Estatisticas
+
+### Producao
+- `GET /api/producao` - Listar producoes
+- `POST /api/producao` - Iniciar producao
+- `PUT /api/producao/:id/etapa` - Avancar etapa
+- `GET /api/producao/stats` - Estatisticas
+
+### Pecas
+- `GET /api/pecas` - Listar pecas
+- `POST /api/pecas` - Criar peca
+- `PUT /api/pecas/:id/instalar` - Instalar peca
+
+### Etapas
+- `GET /api/etapas` - Listar etapas
+- `PUT /api/etapas/:id/reordenar` - Reordenar
+
+### Funcionarios
+- `GET /api/funcionarios` - Listar funcionarios
+- `POST /api/funcionarios` - Criar funcionario
+
+### Testes
+- `GET /api/testes` - Listar testes
+- `POST /api/testes` - Criar teste
+- `PUT /api/testes/:id/resultado` - Registrar resultado
+
+## Perfis de Usuario
+
+| Perfil | Permissoes |
+|--------|------------|
+| Admin | Acesso total ao sistema |
+| Engenheiro | Gerenciar aeronaves, etapas e testes |
+| Operador | Visualizar e atualizar producao |
+
+## Docker (Opcional)
+
+Para rodar com Docker:
+
+```bash
+docker-compose up -d
+```
+
+## Compatibilidade
+
+- Windows 10+
+- Ubuntu 24.04.03+
+- Derivados do Ubuntu
+
+## Documentacao
+
+Consulte o relatorio tecnico em `relatorio/relatorio_aerocode.pdf`
+
+## Autor
+
+Enzo Gabriel - [@EnzoGabrielCode](https://github.com/EnzoGabrielCode)
