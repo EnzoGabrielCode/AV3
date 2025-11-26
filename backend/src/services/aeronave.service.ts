@@ -53,6 +53,32 @@ export class AeronaveService {
     return aeronave
   }
 
+  async buscarFuncionarios(aeronaveId: number) {
+    const aeronave = await prisma.aeronave.findUnique({
+      where: { id: aeronaveId },
+      include: {
+        funcionarios: {
+          include: {
+            usuario: true
+          }
+        }
+      }
+    })
+
+    if (!aeronave) {
+      throw new Error('Aeronave não encontrada')
+    }
+
+    return aeronave.funcionarios.map(f => ({
+      id: f.id,
+      nome: f.nome,
+      funcao: f.funcao,
+      telefone: f.usuario?.nome || '',
+      endereco: '',
+      user: f.usuario?.email || ''
+    }))
+  }
+
   async buscarPorCodigo(cod: string) {
     return await prisma.aeronave.findUnique({
       where: { cod },
