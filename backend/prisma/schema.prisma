@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  email         String         @unique
+  senha         String
+  role          String         @default("operador")
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+  funcionario   Funcionario?
+
+  @@map("usuarios")
+}
+
+model Aeronave {
+  id            Int            @id @default(autoincrement())
+  cod           String         @unique
+  modelo        String
+  tipo          String
+  capacidade    Int
+  alcance       Int
+  status        String         @default("em_producao")
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+  pecas         Peca[]
+  etapas        Etapa[]
+  funcionarios  Funcionario[]
+  testes        Teste[]
+  producao      Producao?
+
+  @@map("aeronaves")
+}
+
+model Peca {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  codigo        String         @unique
+  status        String         @default("pendente")
+  quantidade    Int            @default(1)
+  aeronaveId    Int
+  aeronave      Aeronave       @relation(fields: [aeronaveId], references: [id], onDelete: Cascade)
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+
+  @@map("pecas")
+}
+
+model Etapa {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  descricao     String?
+  ordem         Int
+  status        String         @default("pendente")
+  aeronaveId    Int
+  aeronave      Aeronave       @relation(fields: [aeronaveId], references: [id], onDelete: Cascade)
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+
+  @@map("etapas")
+}
+
+model Funcionario {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  funcao        String
+  salario       Float?
+  usuarioId     Int?           @unique
+  usuario       Usuario?       @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  aeronaveId    Int?
+  aeronave      Aeronave?      @relation(fields: [aeronaveId], references: [id], onDelete: SetNull)
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+
+  @@map("funcionarios")
+}
+
+model Teste {
+  id            Int            @id @default(autoincrement())
+  nome          String
+  tipo          String
+  status        String         @default("pendente")
+  resultado     String?
+  aeronaveId    Int
+  aeronave      Aeronave       @relation(fields: [aeronaveId], references: [id], onDelete: Cascade)
+  criadoEm      DateTime       @default(now())
+  atualizadoEm  DateTime       @updatedAt
+
+  @@map("testes")
+}
+
+model Producao {
+  id                Int            @id @default(autoincrement())
+  aeronaveId        Int            @unique
+  aeronave          Aeronave       @relation(fields: [aeronaveId], references: [id], onDelete: Cascade)
+  dataInicio        DateTime       @default(now())
+  dataPrevisao      DateTime?
+  dataFinalizacao   DateTime?
+  statusAtual       String         @default("iniciada")
+  percentual        Int            @default(0)
+  criadoEm          DateTime       @default(now())
+  atualizadoEm      DateTime       @updatedAt
+
+  @@map("producoes")
+}
