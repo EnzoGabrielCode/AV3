@@ -4,6 +4,7 @@ import { PecaController } from '../controllers/peca.controller'
 const router = Router()
 
 router.get('/', PecaController.listar)
+router.get('/aeronave/:aeronaveId', PecaController.listarPorAeronave)
 router.get('/:id', PecaController.buscarPorId)
 router.post('/', PecaController.criar)
 router.put('/:id', PecaController.atualizar)
