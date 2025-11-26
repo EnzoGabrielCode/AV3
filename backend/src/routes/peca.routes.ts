@@ -1,14 +1,13 @@
-import { Router } from 'express';
-import * as PecaController from '../controllers/peca.controller';
+import { Router } from 'express'
+import { PecaController } from '../controllers/peca.controller'
 
-const router = Router();
+const router = Router()
 
-router.get('/', PecaController.listarPecas);
-router.get('/aeronave/:aeronaveId', PecaController.listarPorAeronave);
-router.get('/:id', PecaController.buscarPorId);
-router.post('/', PecaController.criarPeca);
-router.put('/:id', PecaController.atualizarPeca);
-router.put('/:id/status', PecaController.atualizarStatus);
-router.delete('/:id', PecaController.deletarPeca);
+router.get('/', PecaController.listar)
+router.get('/:id', PecaController.buscarPorId)
+router.post('/', PecaController.criar)
+router.put('/:id', PecaController.atualizar)
+router.put('/:id/status', PecaController.atualizarStatus)
+router.delete('/:id', PecaController.excluir)
 
-export default router;
+export default router
