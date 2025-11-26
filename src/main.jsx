@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     element: <Pecas />,
   },
   {
-    path: "/funcionariosAeronave",
+    path: "/funcionariosAeronave/:id",
     element: <Funcionarios />,
   },
   {
