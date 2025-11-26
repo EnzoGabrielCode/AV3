@@ -112,12 +112,11 @@ function HomeAdm() {
           </div>
         </div>
       </div>
-      {showModal && (
-        <ModalCadastrarAeronave
-          onClose={() => setShowModal(false)}
-          onSubmit={handleAddAeronave}
-        />
-      )}
+      <ModalCadastrarAeronave
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleAddAeronave}
+      />
     </div>
   );
 }
