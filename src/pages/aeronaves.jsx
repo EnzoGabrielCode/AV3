@@ -1,7 +1,12 @@
 import Navbar from "../components/navbar";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+<<<<<<< Updated upstream
 import { api } from "../services/api";
+=======
+import { aeronaveService } from "../services/api";
+import { useEffect } from "react";
+>>>>>>> Stashed changes
 
 function Aeronaves() {
   const navigate = useNavigate();
@@ -9,9 +14,42 @@ function Aeronaves() {
   const [aeronave, setAeronave] = useState(null);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< Updated upstream
   useEffect(() => {
     carregarAeronave();
   }, [id]);
+=======
+  const [aeronaves, setAeronaves] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    carregarAeronaves();
+  }, []);
+
+  const carregarAeronaves = async () => {
+    try {
+      const data = await aeronaveService.listar();
+      setAeronaves(data);
+    } catch (error) {
+      console.error("Erro ao carregar aeronaves:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const salvarAeronave = async (aeronave) => {
+    try {
+      if (aeronave.id) {
+        await aeronaveService.atualizar(aeronave.id, aeronave);
+      } else {
+        await aeronaveService.criar(aeronave);
+      }
+      carregarAeronaves();
+    } catch (error) {
+      console.error("Erro ao salvar aeronave:", error);
+    }
+  };
+>>>>>>> Stashed changes
 
   const carregarAeronave = async () => {
     try {
