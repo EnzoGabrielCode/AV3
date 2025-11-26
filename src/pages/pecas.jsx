@@ -1,7 +1,7 @@
 import Navbar from "../components/navbar";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ModalCadastrarPeca from "../components/modals/modalCadastrarPeca";
+import ModalCadastraPeca from "../components/modals/modalCadastraPeca";
 import ModalEditarPeca from "../components/modals/modalEditarPeca";
 import { api } from "../services/api";
 
@@ -119,7 +119,7 @@ function Pecas() {
           )}
         </div>
 
-        <ModalCadastrarPeca
+        <ModalCadastraPeca
           open={showModalCadastro}
           onClose={() => setShowModalCadastro(false)}
           onSave={handleAddPeca}
