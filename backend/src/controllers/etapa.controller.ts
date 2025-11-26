@@ -13,6 +13,17 @@ export class EtapaController {
         }
     }
 
+    static async listarPorAeronave(req: Request, res: Response) {
+        try {
+            const aeronaveId = parseInt(req.params.aeronaveId)
+            if (isNaN(aeronaveId)) return res.status(400).json({ erro: 'ID da aeronave invalido' })
+            const etapas = await etapaService.listarPorAeronave(aeronaveId)
+            return res.json(etapas)
+        } catch (error) {
+            return res.status(500).json({ erro: 'Erro ao listar etapas por aeronave', mensagem: error instanceof Error ? error.message : 'Erro desconhecido' })
+        }
+    }
+
     static async buscarPorId(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id)
@@ -27,9 +38,10 @@ export class EtapaController {
 
     static async criar(req: Request, res: Response) {
         try {
-            const { nome, prazo, status } = req.body
+            const { nome, prazo, status, aeronaveId } = req.body
             if (!nome || !prazo) return res.status(400).json({ erro: 'Nome e prazo sao obrigatorios' })
-            const etapa = await etapaService.criar({ nome, prazo, status })
+            if (!aeronaveId) return res.status(400).json({ erro: 'ID da aeronave e obrigatorio' })
+            const etapa = await etapaService.criar({ nome, prazo, status, aeronaveId })
             return res.status(201).json(etapa)
         } catch (error) {
             return res.status(500).json({ erro: 'Erro ao criar etapa', mensagem: error instanceof Error ? error.message : 'Erro desconhecido' })
@@ -40,22 +52,12 @@ export class EtapaController {
         try {
             const id = parseInt(req.params.id)
             if (isNaN(id)) return res.status(400).json({ erro: 'ID invalido' })
-            const etapa = await etapaService.atualizar(id, req.body)
+            const { nome, prazo, status } = req.body
+            const etapa = await etapaService.atualizar(id, { nome, prazo, status })
             return res.json(etapa)
         } catch (error) {
             if (error instanceof Error && error.message === 'Etapa nao encontrada') return res.status(404).json({ erro: error.message })
             return res.status(500).json({ erro: 'Erro ao atualizar etapa', mensagem: error instanceof Error ? error.message : 'Erro desconhecido' })
-        }
-    }
-
-    static async iniciar(req: Request, res: Response) {
-        try {
-            const id = parseInt(req.params.id)
-            if (isNaN(id)) return res.status(400).json({ erro: 'ID invalido' })
-            const etapa = await etapaService.iniciar(id)
-            return res.json(etapa)
-        } catch (error) {
-            return res.status(500).json({ erro: 'Erro ao iniciar etapa', mensagem: error instanceof Error ? error.message : 'Erro desconhecido' })
         }
     }
 
