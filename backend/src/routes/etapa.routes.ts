@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as EtapaController from '../controllers/etapa.controller'
+import { EtapaController } from '../controllers/etapa.controller'
 
 const router = Router()
 
