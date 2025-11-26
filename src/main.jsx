@@ -26,11 +26,11 @@ const router = createBrowserRouter([
     element: <Aeronaves />,
   },
   {
-    path: "/etapas",
+    path: "/etapas/:id",
     element: <Etapas />,
   },
   {
-    path: "/pecas",
+    path: "/pecas/:id",
     element: <Pecas />,
   },
   {
