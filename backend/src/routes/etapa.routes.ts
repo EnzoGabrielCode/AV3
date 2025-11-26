@@ -1,15 +1,13 @@
-import { Router } from 'express';
-import * as EtapaController from '../controllers/etapa.controller';
+import { Router } from 'express'
+import * as EtapaController from '../controllers/etapa.controller'
 
-const router = Router();
+const router = Router()
 
-router.get('/', EtapaController.listarEtapas);
-router.get('/aeronave/:aeronaveId', EtapaController.listarPorAeronave);
-router.get('/:id', EtapaController.buscarPorId);
-router.post('/', EtapaController.criarEtapa);
-router.put('/:id', EtapaController.atualizarEtapa);
-router.put('/:id/reordenar', EtapaController.reordenar);
-router.put('/:id/status', EtapaController.atualizarStatus);
-router.delete('/:id', EtapaController.deletarEtapa);
+router.get('/', EtapaController.listar)
+router.get('/:id', EtapaController.buscarPorId)
+router.post('/', EtapaController.criar)
+router.put('/:id', EtapaController.atualizar)
+router.put('/:id/iniciar', EtapaController.iniciar)
+router.put('/:id/finalizar', EtapaController.finalizar)
 
-export default router;
+export default router
