@@ -8,8 +8,8 @@ Aplicação web full-stack desenvolvida para gestão completa de aeronaves, com 
 
 ### 1. Clonar o Repositório
 ```bash
-git clone [https://github.com/EnzoGabrielCode/teste-av.git](https://github.com/EnzoGabrielCode/teste-av.git)
-cd teste-av
+git clone https://github.com/EnzoGabrielCode/AV3.git
+cd AV3
 ````
 
 ### 2\. Configurar o Banco de Dados (MySQL)
@@ -31,7 +31,7 @@ USE aerocode;
 <!-- end list -->
 
   - Vá até a pasta `backend/`
-  - Crie um arquivo chamado `.env` (você pode copiar o `.env.example`)
+  - Crie um arquivo chamado `.env`
   - Edite a variável `DATABASE_URL` com seu usuário e senha do MySQL:
 
 <!-- end list -->
@@ -237,7 +237,7 @@ Este projeto foi desenvolvido para fins educacionais.
 **Enzo Gabriel**
 
   - GitHub: [@EnzoGabrielCode](https://www.google.com/search?q=https://github.com/EnzoGabrielCode)
-  - Repositório: [teste-av](https://www.google.com/search?q=https://github.com/EnzoGabrielCode/AV3)
+  - Repositório: [AV3](https://www.google.com/search?q=https://github.com/EnzoGabrielCode/AV3)
 
 -----
 
